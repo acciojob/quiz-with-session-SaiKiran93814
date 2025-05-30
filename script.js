@@ -1,30 +1,31 @@
- const quizData = [
-      {
-        question: "What is the capital of France?",
-        options: ["Berlin", "London", "Paris", "Madrid"],
-        answer: 2
-      },
-      {
-        question: "What is 2 + 2?",
-        options: ["3", "4", "5", "6"],
-        answer: 1
-      },
-      {
-        question: "Which planet is known as the Red Planet?",
-        options: ["Earth", "Mars", "Jupiter", "Saturn"],
-        answer: 1
-      },
-      {
-        question: "Who wrote 'Hamlet'?",
-        options: ["Shakespeare", "Tolstoy", "Hemingway", "Dickens"],
-        answer: 0
-      },
-      {
-        question: "What is the boiling point of water?",
-        options: ["50°C", "100°C", "150°C", "200°C"],
-        answer: 1
-      }
-    ];
+const questions = [
+  {
+    question: "What is the highest mountain in the world?",
+    choices: ["K2", "Everest", "Kangchenjunga", "Lhotse"],
+    answer: "Everest",
+  },
+  {
+    question: "What is the capital of France?",
+    choices: ["Paris", "Rome", "Madrid", "Berlin"],
+    answer: "Paris",
+  },
+  {
+    question: "Which planet is known as the Red Planet?",
+    choices: ["Earth", "Venus", "Mars", "Jupiter"],
+    answer: "Mars",
+  },
+  {
+    question: "What is the chemical symbol for water?",
+    choices: ["O2", "H2O", "CO2", "NaCl"],
+    answer: "H2O",
+  },
+  {
+    question: "Who wrote 'Romeo and Juliet'?",
+    choices: ["Mark Twain", "William Shakespeare", "Charles Dickens", "Jane Austen"],
+    answer: "William Shakespeare",
+  }
+];
+
 
     const questionsContainer = document.getElementById("questions");
     const submitBtn = document.getElementById("submit");
