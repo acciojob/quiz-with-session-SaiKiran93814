@@ -58,7 +58,7 @@ function renderQuestions() {
 
     // Question text with question number
     const questionText = document.createElement("p");
-    questionText.textContent = `${i + 1}. ${q.question}`;
+   questionText.textContent = q.question;
     questionDiv.appendChild(questionText);
 
     // Create radio inputs for each choice
