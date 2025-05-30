@@ -46,7 +46,8 @@
       questionsContainer.innerHTML = "";
       quizData.forEach((q, i) => {
         const questionDiv = document.createElement("div");
-        questionDiv.innerHTML = `<p>${i + 1}. ${q.question}</p>`;
+        questionDiv.innerHTML = `<p>${q.question}</p>`;
+
 
         q.options.forEach((opt, idx) => {
           const optionId = `q${i}_opt${idx}`;
