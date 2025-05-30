@@ -27,54 +27,35 @@ const questions = [
 ];
 
 const questionsElement = document.getElementById("questions");
+questionsElement.innerHTML = "";  // Clear previous content
 
-// Retrieve saved answers from sessionStorage or empty array
-let userAnswers = JSON.parse(sessionStorage.getItem("progress")) || [];
+for (let i = 0; i < questions.length; i++) {
+  const question = questions[i];
+  const questionDiv = document.createElement("div");
 
-function renderQuestions() {
-  questionsElement.innerHTML = ""; // Clear previous content
+  // Add question text
+  const questionText = document.createTextNode(question.question);
+  questionDiv.appendChild(questionText);
 
-  for (let i = 0; i < questions.length; i++) {
-    const question = questions[i];
-    const questionDiv = document.createElement("div");
+  // Add choices
+  for (let j = 0; j < question.choices.length; j++) {
+    const choice = question.choices[j];
+    const choiceInput = document.createElement("input");
+    choiceInput.type = "radio";
+    choiceInput.name = `question-${i}`;
+    choiceInput.value = choice;
+    // Set checked attribute if needed (see previous advice)
+    // e.g. if (userAnswers[i] === choice) choiceInput.setAttribute("checked", "checked");
+    
+    const choiceLabel = document.createTextNode(choice);
 
-    // Question text
-    const questionText = document.createElement("p");
-    questionText.textContent = question.question;
-    questionDiv.appendChild(questionText);
-
-    // Choices
-    for (let j = 0; j < question.choices.length; j++) {
-      const choice = question.choices[j];
-
-      const label = document.createElement("label");
-      label.style.display = "block"; // So each choice is on a new line
-
-      const choiceInput = document.createElement("input");
-      choiceInput.type = "radio";
-      choiceInput.name = `question-${i}`;
-      choiceInput.value = choice;
-
-      // Check if this choice was previously selected
-      if (userAnswers[i] === choice) {
-        choiceInput.checked = true;
-      }
-
-      // When user selects an answer, save progress to sessionStorage
-      choiceInput.addEventListener("change", () => {
-        userAnswers[i] = choice;
-        sessionStorage.setItem("progress", JSON.stringify(userAnswers));
-      });
-
-      label.appendChild(choiceInput);
-      label.appendChild(document.createTextNode(choice));
-
-      questionDiv.appendChild(label);
-    }
-
-    questionsElement.appendChild(questionDiv);
+    questionDiv.appendChild(choiceInput);
+    questionDiv.appendChild(choiceLabel);
   }
+
+  questionsElement.appendChild(questionDiv);
 }
+
 
 renderQuestions();
 
