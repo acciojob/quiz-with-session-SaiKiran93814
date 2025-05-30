@@ -23,74 +23,70 @@ const questions = [
     question: "Who wrote 'Romeo and Juliet'?",
     choices: ["Mark Twain", "William Shakespeare", "Charles Dickens", "Jane Austen"],
     answer: "William Shakespeare",
-  }
+  },
 ];
 
+const questionsElement = document.getElementById("questions");
 
-    const questionsContainer = document.getElementById("questions");
-    const submitBtn = document.getElementById("submit");
-    const scoreDiv = document.getElementById("score");
+// Retrieve saved answers from sessionStorage or empty array
+let userAnswers = JSON.parse(sessionStorage.getItem("progress")) || [];
 
-    // Load saved progress from sessionStorage or start fresh
-    let progress = {};
-    if (sessionStorage.getItem("progress")) {
-      progress = JSON.parse(sessionStorage.getItem("progress"));
-    }
+function renderQuestions() {
+  questionsElement.innerHTML = ""; // Clear previous content
 
-    // Load score from localStorage and display if exists
-    if (localStorage.getItem("score") !== null) {
-      scoreDiv.textContent = `Your score is ${localStorage.getItem("score")} out of ${quizData.length}.`;
-    }
+  for (let i = 0; i < questions.length; i++) {
+    const question = questions[i];
+    const questionDiv = document.createElement("div");
 
-    // Render questions & options
-    function renderQuiz() {
-      questionsContainer.innerHTML = "";
-      quizData.forEach((q, i) => {
-        const questionDiv = document.createElement("div");
-        questionDiv.innerHTML = `<p>${q.question}</p>`;
+    // Question text
+    const questionText = document.createElement("p");
+    questionText.textContent = question.question;
+    questionDiv.appendChild(questionText);
 
+    // Choices
+    for (let j = 0; j < question.choices.length; j++) {
+      const choice = question.choices[j];
 
-        q.options.forEach((opt, idx) => {
-          const optionId = `q${i}_opt${idx}`;
-          const isChecked = progress[i] === idx;
-          const radioHTML = `
-            <input 
-              type="radio" 
-              id="${optionId}" 
-              name="question${i}" 
-              value="${idx}" 
-              ${isChecked ? "checked" : ""}
-            />
-            <label for="${optionId}">${opt}</label><br/>
-          `;
-          questionDiv.innerHTML += radioHTML;
-        });
-        questionsContainer.appendChild(questionDiv);
-      });
-    }
+      const label = document.createElement("label");
+      label.style.display = "block"; // So each choice is on a new line
 
-    renderQuiz();
+      const choiceInput = document.createElement("input");
+      choiceInput.type = "radio";
+      choiceInput.name = `question-${i}`;
+      choiceInput.value = choice;
 
-    // Save progress on option change
-    questionsContainer.addEventListener("change", (e) => {
-      if (e.target && e.target.name.startsWith("question")) {
-        const qIndex = parseInt(e.target.name.replace("question", ""), 10);
-        const answerIndex = parseInt(e.target.value, 10);
-        progress[qIndex] = answerIndex;
-        sessionStorage.setItem("progress", JSON.stringify(progress));
+      // Check if this choice was previously selected
+      if (userAnswers[i] === choice) {
+        choiceInput.checked = true;
       }
-    });
 
-    // On submit, calculate score, store in localStorage, display score
-    submitBtn.addEventListener("click", () => {
-      let score = 0;
-      quizData.forEach((q, i) => {
-        if (progress[i] === q.answer) score++;
+      // When user selects an answer, save progress to sessionStorage
+      choiceInput.addEventListener("change", () => {
+        userAnswers[i] = choice;
+        sessionStorage.setItem("progress", JSON.stringify(userAnswers));
       });
-      scoreDiv.textContent = `Your score is ${score} out of ${quizData.length}.`;
-      localStorage.setItem("score", score);
 
-      // Optionally clear progress so user can retake quiz freshly or keep it
-      // sessionStorage.removeItem("progress");
-    });
+      label.appendChild(choiceInput);
+      label.appendChild(document.createTextNode(choice));
+
+      questionDiv.appendChild(label);
+    }
+
+    questionsElement.appendChild(questionDiv);
+  }
+}
+
+renderQuestions();
+
+// Submit button handler example to calculate score and store in localStorage
+document.getElementById("submit").addEventListener("click", () => {
+  let score = 0;
+  for (let i = 0; i < questions.length; i++) {
+    if (userAnswers[i] === questions[i].answer) {
+      score++;
+    }
+  }
+  document.getElementById("score").textContent = `Your score is ${score} out of ${questions.length}.`;
+  localStorage.setItem("score", score);
+});
 
