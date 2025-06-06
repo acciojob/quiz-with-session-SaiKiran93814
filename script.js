@@ -42,8 +42,8 @@ function renderQuiz() {
     div.className = 'question-block';
 
     // Question text
-    const qText = document.createElement('p');
-    qText.textContent = `${id}. ${question}`;
+   const qText = document.createElement('p');
+	qText.textContent = question;  // Just the question text without numbering
     div.appendChild(qText);
 
     // Options radio buttons
