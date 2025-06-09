@@ -1,1 +1,23 @@
 /*  your css code here. If applicable */
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: auto;
+    padding: 1rem;
+  }
+
+  #questions > div {
+    margin-bottom: 1rem;
+  }
+
+  #score {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+</style>
