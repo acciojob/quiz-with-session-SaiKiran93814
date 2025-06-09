@@ -17,7 +17,7 @@ const questions = [
   },
   {
     question: "Which is the largest planet in our solar system?",
-    choices: ["Earth", "Jupiter", "Mars", "Saturn"],
+    choices: ["Earth", "Jupiter", "Mars", "Saturn"],  // added "Saturn" for 4 options
     answer: "Jupiter",
   },
   {
@@ -43,42 +43,40 @@ if (savedProgress) {
   }
 }
 
-// Load saved score from localStorage
+// Load saved score from localStorage (show if exists)
 const savedScore = localStorage.getItem("score");
 if (savedScore !== null) {
   scoreElement.textContent = `Your score is ${savedScore} out of ${questions.length}.`;
-  disableInputs(); // disable inputs if quiz was already submitted
 }
 
 // Render quiz questions and options
 function renderQuestions() {
-  questionsElement.innerHTML = "";
+  questionsElement.innerHTML = ""; // clear before rendering
 
   questions.forEach((q, i) => {
     const questionDiv = document.createElement("div");
 
+    // Question text with question number
     const questionText = document.createElement("p");
-    questionText.textContent = `${i + 1}. ${q.question}`;
+   questionText.textContent = q.question;
     questionDiv.appendChild(questionText);
 
+    // Create radio inputs for each choice
     q.choices.forEach((choice) => {
       const label = document.createElement("label");
-      label.style.display = "block";
+      label.style.display = "block";  // each option on own line
 
       const input = document.createElement("input");
       input.type = "radio";
       input.name = `question-${i}`;
       input.value = choice;
 
+      // Check if previously selected
       if (progress[i] === choice) {
         input.checked = true;
       }
 
-      // Prevent input if already submitted
-      if (savedScore !== null) {
-        input.disabled = true;
-      }
-
+      // On change, save to sessionStorage
       input.addEventListener("change", () => {
         progress[i] = input.value;
         sessionStorage.setItem("progress", JSON.stringify(progress));
@@ -93,14 +91,7 @@ function renderQuestions() {
   });
 }
 
-// Disable all radio inputs and the submit button
-function disableInputs() {
-  const inputs = document.querySelectorAll("input[type='radio']");
-  inputs.forEach(input => input.disabled = true);
-  submitButton.disabled = true;
-}
-
-// Submit handler
+// Calculate score and display it, store in localStorage
 function submitQuiz() {
   let score = 0;
   for (let i = 0; i < questions.length; i++) {
@@ -111,12 +102,9 @@ function submitQuiz() {
 
   scoreElement.textContent = `Your score is ${score} out of ${questions.length}.`;
   localStorage.setItem("score", score);
-
-  disableInputs(); // lock quiz
-  // sessionStorage.removeItem("progress"); // optional: clear answers after submission
 }
 
-// Event listener
+// Event listener for submit
 submitButton.addEventListener("click", submitQuiz);
 
 // Initial render
